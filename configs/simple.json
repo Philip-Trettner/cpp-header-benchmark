@@ -1,0 +1,16 @@
+{
+    "compilers": {
+        "clang-7": "/usr/bin/clang-7"
+    },
+    "flags": {
+        "cpp": ["-std=c++11", "-std=c++14", "-std=c++17"],
+        "opt": ["-O0", "-O2"]
+    },
+    "sources": {
+        "empty": "",
+        "string": "#include <string>",
+        "vector": "#include <vector>",
+        "functional": "#include <functional>",
+        "iostream": "#include <iostream>"
+    }
+}
