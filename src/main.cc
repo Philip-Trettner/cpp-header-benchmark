@@ -26,9 +26,14 @@ int main(int argc, char const* argv[])
         std::string name;
         std::string code;
     };
+    struct flag
+    {
+        std::string name;
+        std::vector<std::string> options;
+    };
 
     std::vector<compiler> compilers;
-    std::map<std::string, std::vector<std::string>> flags;
+    std::vector<flag> flags;
     std::vector<source> sources;
 
     // read config
@@ -48,10 +53,11 @@ int main(int argc, char const* argv[])
 
         for (auto const& [n, c] : cfg["flags"].items())
         {
-            std::vector<std::string> fs;
-            for (auto const& f : c)
-                fs.push_back(f);
-            flags[n] = fs;
+            flag f;
+            f.name = n;
+            for (auto const& o : c)
+                f.options.push_back(o);
+            flags.push_back(f);
         }
 
         for (auto const& [n, c] : cfg["sources"].items())
@@ -88,7 +94,7 @@ int main(int argc, char const* argv[])
         // header
         csv << "source,compiler";
         for (auto const& f : flags)
-            csv << "," << f.first;
+            csv << "," << f.name;
         csv << ",ms";
         csv << std::endl;
 
