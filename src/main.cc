@@ -6,9 +6,9 @@
 
 int main(int argc, char const* argv[])
 {
-    if (argc != 2)
+    if (argc != 3)
     {
-        std::cout << "Usage: ~ test-config.json" << std::endl;
+        std::cout << "Usage: ~ test-config.json output.csv" << std::endl;
 
         return EXIT_SUCCESS;
     }
@@ -33,7 +33,7 @@ int main(int argc, char const* argv[])
 
     // read config
     {
-        std::cerr << "reading config '" << argv[1] << "'" << std::endl;
+        std::cout << "reading config '" << argv[1] << "'" << std::endl;
         std::ifstream cfg_file(argv[1]);
         json cfg;
         cfg_file >> cfg;
@@ -60,35 +60,37 @@ int main(int argc, char const* argv[])
 
     // initial report
     {
-        std::cerr << std::endl;
-        std::cerr << "Compilers:" << std::endl;
+        std::cout << std::endl;
+        std::cout << "Compilers:" << std::endl;
         for (auto const& c : compilers)
-            std::cerr << "  " << c.name << ": '" << c.path << "'" << std::endl;
+            std::cout << "  " << c.name << ": '" << c.path << "'" << std::endl;
 
-        std::cerr << std::endl;
-        std::cerr << "Flag Choices:" << std::endl;
+        std::cout << std::endl;
+        std::cout << "Flag Choices:" << std::endl;
         for (auto const& [name, fs] : flags)
         {
-            std::cerr << "  " << name << ": ";
+            std::cout << "  " << name << ": ";
             for (auto i = 0u; i < fs.size(); ++i)
-                std::cerr << (i == 0 ? "" : " | ") << "'" << fs[i] << "'";
-            std::cerr << std::endl;
+                std::cout << (i == 0 ? "" : " | ") << "'" << fs[i] << "'";
+            std::cout << std::endl;
         }
 
-        std::cerr << std::endl;
-        std::cerr << "Sources:" << std::endl;
+        std::cout << std::endl;
+        std::cout << "Sources:" << std::endl;
         for (auto const& s : sources)
-            std::cerr << "  " << s.name << ": \"" << s.code << "\"" << std::endl;
+            std::cout << "  " << s.name << ": \"" << s.code << "\"" << std::endl;
     }
 
     // actual execution
     {
+        std::ofstream csv(argv[2]);
+
         // header
-        std::cout << "source, compiler";
+        csv << "source,compiler";
         for (auto const& f : flags)
-            std::cout << ", " << f.first;
-        std::cout << ", ms";
-        std::cout << std::endl;
+            csv << "," << f.first;
+        csv << ",ms";
+        csv << std::endl;
 
         struct test
         {
@@ -100,28 +102,29 @@ int main(int argc, char const* argv[])
 
         for (auto const& [sn, sc] : sources)
             for (auto const& [cn, cc] : compilers)
-                tests.push_back({sn + ", " + cn, cc, sc});
+                tests.push_back({sn + "," + cn, cc, sc});
 
         auto add_flag = [&](std::string name, std::vector<std::string> options) {
             std::vector<test> new_tests;
             for (auto const& t : tests)
                 for (auto const& o : options)
-                    new_tests.push_back({t.csv + ", '" + o + "'", t.cmd + " " + o, t.src});
+                    new_tests.push_back({t.csv + ",\"" + o + "\"", t.cmd + " " + o, t.src});
             swap(tests, new_tests);
         };
 
         for (auto const& [n, f] : flags)
             add_flag(n, f);
 
-        std::cerr << std::endl;
+        std::cout << std::endl;
         for (auto const& t : tests)
         {
             std::string const tmp_file = "/tmp/cpp-header-benchmark.cc";
             std::ofstream(tmp_file) << t.src << "\n";
 
             auto cmd = t.cmd + " -c " + tmp_file + " -o " + tmp_file + ".o";
-            std::cerr << "test \"" << t.csv << "\", code: \"" << t.src << "\"" << std::endl;
-            std::cerr << "  " << cmd << std::endl;
+            std::cout << std::endl;
+            std::cout << "test \"" << t.csv << "\",code: \"" << t.src << "\"" << std::endl;
+            std::cout << "  " << cmd << std::endl;
 
             auto ok = true;
 
@@ -142,16 +145,16 @@ int main(int argc, char const* argv[])
 
             if (!ok)
             {
-                std::cerr << "  ERROR while executing cmd, skipping entry" << std::endl;
+                std::cout << "  ERROR while executing cmd, skipping entry" << std::endl;
                 continue;
             }
 
-            // for (auto t : times)
-            //     std::cerr << "    " << t * 1000 << " ms" << std::endl;
+            for (auto t : times)
+                std::cout << "    " << t * 1000 << " ms" << std::endl;
 
             sort(times.begin(), times.end());
 
-            std::cout << t.csv << ", " << times[0] * 1000 << std::endl;
+            csv << t.csv << "," << times[0] * 1000 << std::endl;
         }
     }
 
