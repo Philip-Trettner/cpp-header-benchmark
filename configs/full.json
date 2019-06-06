@@ -1,0 +1,81 @@
+{
+    "compilers": {
+        "clang-7": "/usr/bin/clang++-7",
+        "clang-6": "/usr/bin/clang++-6.0",
+        "gcc-7": "/usr/bin/g++-7",
+        "gcc-8": "/usr/bin/g++-8"
+    },
+    "flags": {
+        "c++ version": ["-std=c++11", "-std=c++14", "-std=c++17"],
+        "opt": ["-O0", "-O2"]
+    },
+    "sources": {
+        "empty": "",
+
+        "<array>": "#include <array>",
+        "<bitset>": "#include <bitset>",
+        "<deque>": "#include <deque>",
+        "<forward_list>": "#include <forward_list>",
+        "<list>": "#include <list>",
+        "<map>": "#include <map>",
+        "<queue>": "#include <queue>",
+        "<set>": "#include <set>",
+        "<stack>": "#include <stack>",
+        "<unordered_map>": "#include <unordered_map>",
+        "<unordered_set>": "#include <unordered_set>",
+        "<vector>": "#include <vector>",
+
+        "<algorithm>": "#include <algorithm>",
+        "<chrono>": "#include <chrono>",
+        "<functional>": "#include <functional>",
+        "<iterator>": "#include <iterator>",
+        "<memory>": "#include <memory>",
+        "<stdexcept>": "#include <stdexcept>",
+        "<tuple>": "#include <tuple>",
+        "<utility>": "#include <utility>",
+
+        "<locale>": "#include <locale>",
+        "<codecvt>": "#include <codecvt>",
+
+        "<string>": "#include <string>",
+        "<regex>": "#include <regex>",
+
+        "<fstream>": "#include <fstream>",
+        "<iomanip>": "#include <iomanip>",
+        "<ios>": "#include <ios>",
+        "<iosfwd>": "#include <iosfwd>",
+        "<iostream>": "#include <iostream>",
+        "<istream>": "#include <istream>",
+        "<ostream>": "#include <ostream>",
+        "<sstream>": "#include <sstream>",
+        "<streambuf>": "#include <streambuf>",
+
+        "<exception>": "#include <exception>",
+        "<limits>": "#include <limits>",
+        "<new>": "#include <new>",
+        "<typeinfo>": "#include <typeinfo>",
+
+        "<thread>": "#include <thread>",
+        "<mutex>": "#include <mutex>",
+        "<condition_variable>": "#include <condition_variable>",
+        "<future>": "#include <future>",
+
+        "<complex>": "#include <complex>",
+        "<random>": "#include <random>",
+        "<valarray>": "#include <valarray>",
+        "<numeric>": "#include <numeric>",
+
+        "<type_traits>": "#include <type_traits>",
+        "<initializer_list>": "#include <initializer_list>",
+        "<string_view>": "#include <string_view>",
+        "<atomic>": "#include <atomic>",
+        "<filesystem>": "#include <filesystem>",
+        "<cassert>": "#include <cassert>",
+        "<cstddef>": "#include <cstddef>",
+        "<cstdint>": "#include <cstdint>",
+        "<cmath>": "#include <cmath>",
+        "<any>": "#include <any>",
+        "<variant>": "#include <variant>",
+        "<optional>": "#include <optional>"
+    }
+}
